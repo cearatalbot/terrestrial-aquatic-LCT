@@ -143,7 +143,7 @@ tamStep<-function(t,S,p){
     dCs2.dt = Lf2+lout-Ds2
     dCs3.dt = Bs1+Bs2-Ds3
     dCs4.dt = Bs3-Ds4
-    dCdoc1.dt = Ls1+Ls2+(P/100)*Cprecip-Bdoc-LCT1-Rhdoc
+    dCdoc1.dt = Ls1+Ls2+(P/100)*Cprecip-Bdoc-LCT1-Rhdoc 
     dCdoc2.dt = Bdoc+Ls3-LCT2-Rhdoc2
     dW1.dt = P-Q1-Q12
     dW2.dt = Q12-Q2-T
