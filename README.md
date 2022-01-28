@@ -3,13 +3,13 @@
 R code for "A terrestrial-aquatic model reveals cross-scale interactions regulate lateral carbon transport from terrestrial ecosystems"
 By Talbot et al. 
 
-Functions #Code for custom functions needed to run analyses 
-  Code
-    TAM_MSVersion.R #Model code 
-    SummaryTAM_MSVersion.R #Calculate annual summary data from model output
-    genWeather_MSVersion.R #Weather generator for model experiments
-    genWeatherMOD_MSVersion.R #Modified weather generator that takes mean monthly air temp as input and generates HUC-2 weather
-    gddSum_MSVersion.R #Calculate phenology with weather data based on degree days and light
+Functions #Code for custom functions needed to run analyses <br />
+  Code<br />
+    TAM_MSVersion.R #Model code <br />
+    SummaryTAM_MSVersion.R #Calculate annual summary data from model output<br />
+    genWeather_MSVersion.R #Weather generator for model experiments<br />
+    genWeatherMOD_MSVersion.R #Modified weather generator that takes mean monthly air temp as input and generates HUC-2 weather<br />
+    gddSum_MSVersion.R #Calculate phenology with weather data based on degree days and light<br />
     findInitials_MSVersion.R #Find initial conditions for state variables that take longerto reach equilibrium (i.e., wood C, passive soil C)  
     evaporationFunc_MSVersion.R #Calculate evaporation from aquatic surface (Not implemented in this MS) 
     
