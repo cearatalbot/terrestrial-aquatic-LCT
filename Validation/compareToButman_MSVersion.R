@@ -205,9 +205,11 @@ for(i in 1:21){
 #####################read in files made earlier in script#####
 library(ggplot2)
 library(reshape2)
-RegionsOut<-read.csv("Validation/storedRegions_original.csv", stringsAsFactors=F)
+RegionsOut<-read.csv("Validation/storedRegions.csv", stringsAsFactors=F)
 dfPFT<-read.csv("Validation/regionsPFT.csv", stringsAsFactors=F)#write out PFT to keep
 m2Region<-read.csv("Validation/regionsArea.csv", stringsAsFactors=F)#read in areas
+runoff<-read.csv("Validation/regionsRunoff.csv", stringsAsFactors=F)#read in areas
+
 ListRegions<-c("01", "02", "03W", "03S", "03N","04", "05", "06", 
                "07", "08", "09", "10L", "10U", "11", "12", "13", 
                "14", "15", "16", "17", "18")
@@ -299,6 +301,8 @@ plot1<-ggplot(data=AllLCT, aes(x=Butman, y=model))+geom_point(size=0.7)+
   borderTheme0.5
 plot1
 #ggsave(filename = "Validation/ButmanPointsLCT.png", plot=plot1, width = 3.5, height = 2.5, units= "in", device='png', dpi=320)
+colnames(AllLCT)<-c("Region", "ModelLCT", "ButmanLCT", "RegNum")
+#write.csv(AllLCT, "Validation/CompareLCT.csv", row.names = F)
 
 ###NPP###
 totalRegionsNPP<-data.frame(matrix(ncol=6, nrow=21)) #empty to store calculations
@@ -343,7 +347,8 @@ plot2<-ggplot(data=AllLCT, aes(x=Butman, y=model))+
   borderTheme0.5
 plot2
 #ggsave(filename = "Validation/ButmanPointsNPP.png", plot=plot2, width = 3.6, height = 2.6, units= "in", device='png', dpi=320)
-
+colnames(AllLCT)<-c("Region", "ModelNPP", "ButmanNPP", "ButmanSD", "RegNum")
+#write.csv(AllLCT, "Validation/CompareNPP.csv", row.names = F)
 
 totalRegionsLCTareal<-data.frame(matrix(ncol=5, nrow=21))
 colnames(totalRegionsLCTareal)<-c("Region", "EG_gC", "DE_gC", "SH_gC", "GR_gC")
@@ -381,4 +386,68 @@ plot3<-ggplot(data=arealplusclim, aes(x=Precip, y=LCT, group=Tmax, colour=Tmax))
   borderTheme0.5
 plot3
 #ggsave(filename = "Validation/ArealLCT.png", plot=plot3, width = 3.6, height = 2.6, units= "in", device='png', dpi=320)
+#write.csv(arealplusclim, "Validation/ModeledArealLCT.csv", row.names = F)
+#######RUnoff ratio
+totalRegions<-data.frame(matrix(ncol=6, nrow=21))
+colnames(totalRegions)<-c("Region", "EG_cm", "DE_cm", "SH_cm", "GR_cm", "total")
+for(x in 1:21){
+  regional<-data_wide[data_wide$Region==paste("Region", ListRegions[x], sep=""),]
+  totalRegions$Region[x]<-paste("Region", ListRegions[x], sep="")
+  
+  totalRegions$DE_cm[x]<-(((dfPFT$dec_weighted[x]+(0.5*dfPFT$mx_weighted[x]))/100)*m2Region$m2area[x])*as.numeric(regional$SumD[1])/m2Region$m2area[x]
+  totalRegions$EG_cm[x]<-(((dfPFT$con_weighted[x]+(0.5*dfPFT$mx_weighted[x]))/100)*m2Region$m2area[x])*as.numeric(regional$SumD[2])/m2Region$m2area[x] 
+  totalRegions$GR_cm[x]<-(((dfPFT$gr_weighted[x]+dfPFT$cr_weighted[x])/100)*m2Region$m2area[x])*as.numeric(regional$SumD[3])/m2Region$m2area[x]
+  totalRegions$SH_cm[x]<-((dfPFT$sh_weighted[x]/100)*m2Region$m2area[x])*as.numeric(regional$SumD[4])/m2Region$m2area[x]
+  #totalRegions$total[x]<-(totalRegions$EG_cm[x]+totalRegions$DE_cm[x]+totalRegions$SH_cm[x]+totalRegions$GR_cm[x])/((((dfPFT$dec_weighted[x]+(0.5*dfPFT$mx_weighted[x]))/100)*m2Region$m2area[x])+((((dfPFT$con_weighted[x]+(0.5*dfPFT$mx_weighted[x]))/100)*m2Region$m2area[x])+(((dfPFT$gr_weighted[x]+dfPFT$cr_weighted[x])/100)*m2Region$m2area[x])+((dfPFT$sh_weighted[x]/100)*m2Region$m2area[x]))) 
+}
 
+totalRegions$total<-(totalRegions$EG_cm+totalRegions$DE_cm+totalRegions$SH_cm+totalRegions$GR_cm)
+
+totalR03<-((totalRegions$total[3]*m2Region$m2area[3])+(totalRegions$total[4]*m2Region$m2area[4])+(totalRegions$total[5]*m2Region$m2area[5]))/(m2Region$m2area[3]+m2Region$m2area[4]+m2Region$m2area[5])
+totalR10<-((totalRegions$total[13]*m2Region$m2area[13])+(totalRegions$total[14]*m2Region$m2area[14]))/(m2Region$m2area[13]+m2Region$m2area[14])
+subTotals<-data.frame(cbind(totalRegions$Region, totalRegions$total))
+colnames(subTotals)<-c("Region", "cm_m2")
+subTotals$Region[3]<-"Region03"
+subTotals$cm_m2[3]<-totalR03
+subTotals<-subTotals[-4,]
+subTotals<-subTotals[-4,]
+subTotals$Region[10]<-"Region10"
+subTotals$cm_m2[10]<-totalR10
+subTotals<-subTotals[-11,]
+
+##runoff
+totalPrecipR03<-((runoff$Precip[3]*m2Region$m2area[3])+(runoff$Precip[4]*m2Region$m2area[4])+(runoff$Precip[5]*m2Region$m2area[5]))/(m2Region$m2area[3]+m2Region$m2area[4]+m2Region$m2area[5])
+totalPrecipR10<-((runoff$Precip[13]*m2Region$m2area[13])+(runoff$Precip[14]*m2Region$m2area[14]))/(m2Region$m2area[13]+m2Region$m2area[14])
+totalRatioR03<-((runoff$RunoffRatio[3]*m2Region$m2area[3])+(runoff$RunoffRatio[4]*m2Region$m2area[4])+(runoff$RunoffRatio[5]*m2Region$m2area[5]))/(m2Region$m2area[3]+m2Region$m2area[4]+m2Region$m2area[5])
+totalRatioR10<-((runoff$RunoffRatio[13]*m2Region$m2area[13])+(runoff$RunoffRatio[14]*m2Region$m2area[14]))/(m2Region$m2area[13]+m2Region$m2area[14])
+runoff$Region[3]<-"Region03"
+runoff$Precip[3]<-totalPrecipR03
+runoff$RunoffRatio[3]<-totalRatioR03
+runoff<-runoff[-4,]
+runoff<-runoff[-4,]
+runoff$Region[10]<-"Region10"
+runoff$Precip[10]<-totalPrecipR10
+runoff$RunoffRatio[10]<-totalRatioR10
+runoff<-runoff[-11,]
+
+
+AllRunoff<-cbind(runoff, subTotals$cm_m2)
+colnames(AllRunoff)[5]<-c("ModelRunoff")
+AllRunoff$ModelRunoff<-as.numeric(AllRunoff$ModelRunoff)
+AllRunoff$ModelRatio<-AllRunoff$ModelRunoff/AllRunoff$Precip
+AllRunoff$RegNum<-1:nrow(AllRunoff)
+
+library(ggrepel)
+plot4<-ggplot(data=AllRunoff, aes(x=RunoffRatio, y=ModelRatio))+geom_point(size=0.7)+
+  #geom_text(label=AllLCT$Region)+
+  scale_x_continuous(limits=c(0,0.8), breaks=seq(0, 0.8, 0.2), expand=c(0,0))+
+  scale_y_continuous(limits=c(0,0.8), breaks=seq(0, 0.8, 0.2), expand=c(0,0))+
+  geom_abline(slope=1, intercept = 0, linetype="dashed", color="grey")+
+  labs(y=expression('Modeled runoff ratio'),x=expression('Runoff ratio'))+
+  geom_text(label=AllLCT$RegNum, hjust = -0.1, nudge_x = 0.007,size=2.5)+
+  #annotate("text", x=1, y=11, label= "A.", size=4.5)+
+  borderTheme0.5
+plot4
+#ggsave(filename = "Validation/RunoffRatios.png", plot=plot4, width = 3.5, height = 2.5, units= "in", device='png', dpi=320)
+
+#write.csv(AllRunoff, "Validation/RunoffRatios.csv", row.names = F)
