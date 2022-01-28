@@ -32,7 +32,7 @@ ModelExperiments #model experiment code and output files
     TheoryPlots_MSVersion.R #Create plots for LCT, NPP, water drainage, Soil C, Soil DOC, ..
     runTraits_MSVersion.R #Expanded sensitivity analysis for plant trait values that span range in PFT
   OutputFiles
-    Amax_i0_cp_NewS.csv #file with passive soil C initial conditions for all values of Amax
+    Amax_i0_cp_NewS.csv #file with passive soil C initial conditions for all values of Amax 
     Amax_i0_cw_NewS.csv #file with wood C initial conditions for all values of Amax
     Amax_wide.csv #model simulations for all values of Amax
     ..same filed for each of Kwue, Topt, and aw...
