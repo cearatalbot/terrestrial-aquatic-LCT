@@ -379,7 +379,7 @@ arealplusclim$LCT<-as.numeric(arealplusclim$LCT)
 plot3<-ggplot(data=arealplusclim, aes(x=Precip, y=LCT, group=Tmax, colour=Tmax))+
   scale_x_continuous(limits=c(25,162), breaks=seq(25, 150, 25), expand=c(0,0))+
   scale_y_continuous(limits=c(0,25), breaks=seq(0, 25, 5), expand=c(0,0))+
-  labs(y=expression('LCT'~(g~C~m^-2~yr^-1)),x=expression('Precipitaiton'~(cm~yr^-1)))+
+  labs(y=expression('LCT'~(g~C~m^-2~yr^-1)),x=expression('Precipitation'~(cm~yr^-1)))+
   scale_color_viridis_c("Temp (C)", option="B", alpha = 0.8, begin = 0, end = 0.9)+
   geom_point(size=1)+
   geom_text_repel(label=arealplusclim$RegNum,size=2, color="black")+

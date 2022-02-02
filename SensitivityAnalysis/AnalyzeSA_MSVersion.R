@@ -36,8 +36,25 @@ Climruns<-c(1:60)
 #read in data
 for(i in 1:51){
   fiName<-paste("SASoil",paramList[i], sep="_")
-  fiName1<-paste("Out/",fiName, ".csv", sep="")
+  fiName1<-paste("SensitivityAnalysis/Out/",fiName, ".csv", sep="")
   df1<-read.csv(fiName1, stringsAsFactors = F) #assign file to generated name
+  colnames(df1)[12]<-"Ca"
+  colnames(df1)[14]<-"Ccwd"
+  colnames(df1)[7:8]<-c("Cdoc1", "Cdoc2")
+  colnames(df1)[4:6]<-c("Cs1", "Cs2", "Cs3")
+  colnames(df1)[15]<-"Cs4"
+  colnames(df1)[41] <-"Rs1"
+  colnames(df1)[60] <-"Rs2"
+  colnames(df1)[64] <-"Rs3"
+  colnames(df1)[52]<-"Ds1"
+  colnames(df1)[53]<-"Ds3"
+  colnames(df1)[62]<-"Ds2"
+  colnames(df1)[54]<-"Ds4"
+  colnames(df1)[22]<-"LCT1"
+  colnames(df1)[46]<-"LCT2"
+  colnames(df1)[17:18]<-c("Q1", "Q2")
+  colnames(df1)[56]<-"Ls1"
+  colnames(df1)[55]<-"Ls3"
   #summarize 
   sumDF<-data.frame(matrix(ncol=6, nrow=0))#store summary (36 vars) for each gradient (60) and each trait value
   colnames(sumDF)<-c("runNum", "Variable", "Value", "Tmax", "Precip", "trait")
@@ -84,7 +101,7 @@ for(i in 1:51){
   for(x in 1:60){
     subwide<-data_wide[data_wide$runNum==Climruns[x],]
     if(x==1){
-        for(b in 6:42){
+        for(b in 6:40){
             dfChange[1,b]<-(((subwide[2,b]-subwide[1,b])/subwide[1,b])*100)
             dfChange[2,b]<-(((subwide[3,b]-subwide[1,b])/subwide[1,b])*100)
             dfChange[1:2,1]<-subwide[1,1]
@@ -94,7 +111,7 @@ for(i in 1:51){
             dfChange[1:2,43]<-ifelse(min(subwide$Cw) < 0, -999, 0)
             }}
       else {
-          for(b in 6:42){
+          for(b in 6:40){
                dfChange[(x*2-1),b]<-(((subwide[2,b]-subwide[1,b])/subwide[1,b])*100) #calculate differences
                dfChange[(x*2),b]<-(((subwide[3,b]-subwide[1,b])/subwide[1,b])*100)
                  dfChange[(x*2-1):(x*2),1]<-subwide[1,1] #assign run num
@@ -165,7 +182,7 @@ ParamGroup$Group<-c("Plant", "Plant", "Plant", "Plant", "Plant", "Plant",
                     "Soil", "Plant", "Soil", "Soil", "Soil", "Soil", "Soil", 
                     "Soil", "Soil", "Soil")
 
-varList<-c("Ddoc", "Qbdoc", "NPP", "Cd1", "Cd2", "Co", "Cf2","Cm", "Cp")  
+varList<-c("LCT1", "LCT2", "NPP", "Cdoc1", "Cdoc2", "Cs1", "Cs2","Cs3", "Cs4")  
 cornerLab<-c("A.", "B.", "C.",
              "D.", "E.", "F.",
              "G.", "H.", "I.")
