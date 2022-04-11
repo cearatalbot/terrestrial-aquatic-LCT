@@ -29,7 +29,7 @@ tempCols<-mycols<-viridis(6, alpha = 0.8, begin = 0, end = 0.9, option = "B", di
 data_wide$Tmax_f<-factor(data_wide$Tmax)
 p1<-ggplot(data_wide, aes(x=Precip, y=SumLdoc, group=Tmax_f, colour=Tmax_f))+#geom_boxplot()+
   geom_point(size=1.5)+geom_line(size=1.5)+scale_color_manual(values=tempCols, "Tmax (C)")+
-  labs(x=expression('Precipitation'~(cm~yr^-1)), y=expression('LCT'~(g~C~m^-2~yr^-1)))+
+  labs(x=expression('Precipitation'~(cm~yr^-1)), y=expression('LCT-DOC'~(g~C~m^-2~yr^-1)))+
   borderTheme0.5+scale_y_continuous(limits=c(0,100), breaks=seq(0,100, 25), expand = c(0, 0))+
   annotate("text", x=59, y=93, label= "A.", size=4.5)
 p1 
@@ -98,7 +98,7 @@ SubPrecip<-rbind(data_wide[data_wide$Precip==75,], data_wide[data_wide$Precip==2
 #LCT vs temp
 p1a<-ggplot(SubPrecip, aes(x=Tmax, y=SumLdoc, group=Precip_f, colour=Precip_f))+#geom_boxplot()+
   geom_point(size=1.5)+geom_line(size=1.5)+scale_color_manual(values=mycols2, "Precipitation")+
-  labs(x=expression('Tmax'~(C)), y=expression('LCT'~(g~C~m^-2~yr^-1)))+
+  labs(x=expression('Tmax'~(C)), y=expression('LCT-DOC'~(g~C~m^-2~yr^-1)))+
   borderTheme0.5+scale_y_continuous(limits=c(0,100), breaks=seq(0,100, 25), expand = c(0, 0))+
   scale_x_continuous(limits=c(11,28), breaks=seq(12,27, 3), expand = c(0, 0))+
   annotate("text", x=12.6, y=93, label= "A.", size=4.5)

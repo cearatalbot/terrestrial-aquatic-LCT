@@ -295,12 +295,12 @@ plot1<-ggplot(data=AllLCT, aes(x=Butman, y=model))+geom_point(size=0.7)+
   scale_x_continuous(limits=c(0,12), breaks=seq(0, 12, 3), expand=c(0,0))+
   scale_y_continuous(limits=c(0,12), breaks=seq(0, 12, 3), expand=c(0,0))+
   geom_abline(slope=1, intercept = 0, linetype="dashed", color="grey")+
-  labs(y=expression('Modeled LCT'~(Tg~C~yr^-1)),x=expression('Literature LCT'~(Tg~C~yr^-1)))+
+  labs(y=expression('Modeled LCT-DOC'~(Tg~C~yr^-1)),x=expression('Literature LCT-DOC'~(Tg~C~yr^-1)))+
   geom_text(label=AllLCT$RegNum, hjust = -0.1, nudge_x = 0.2,size=2.5)+
   annotate("text", x=1, y=11, label= "A.", size=4.5)+
   borderTheme0.5
 plot1
-#ggsave(filename = "Validation/ButmanPointsLCT.png", plot=plot1, width = 3.5, height = 2.5, units= "in", device='png', dpi=320)
+#ggsave(filename = "Validation/ButmanPointsLCT.png", plot=plot1, width = 3.8, height = 2.8, units= "in", device='png', dpi=320)
 colnames(AllLCT)<-c("Region", "ModelLCT", "ButmanLCT", "RegNum")
 #write.csv(AllLCT, "Validation/CompareLCT.csv", row.names = F)
 
@@ -379,7 +379,7 @@ arealplusclim$LCT<-as.numeric(arealplusclim$LCT)
 plot3<-ggplot(data=arealplusclim, aes(x=Precip, y=LCT, group=Tmax, colour=Tmax))+
   scale_x_continuous(limits=c(25,162), breaks=seq(25, 150, 25), expand=c(0,0))+
   scale_y_continuous(limits=c(0,25), breaks=seq(0, 25, 5), expand=c(0,0))+
-  labs(y=expression('LCT'~(g~C~m^-2~yr^-1)),x=expression('Precipitation'~(cm~yr^-1)))+
+  labs(y=expression('LCT-DOC'~(g~C~m^-2~yr^-1)),x=expression('Precipitation'~(cm~yr^-1)))+
   scale_color_viridis_c("Temp (C)", option="B", alpha = 0.8, begin = 0, end = 0.9)+
   geom_point(size=1)+
   geom_text_repel(label=arealplusclim$RegNum,size=2, color="black")+
